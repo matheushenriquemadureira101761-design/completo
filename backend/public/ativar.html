@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Ativar assinatura · AGROVINC</title>
+<style>
+:root{--fundo:#14361F;--folha:#0E2717;--campo:#1F3D2B;--borda:#2E5B3D;--texto:#fff;--suave:#D9E8DC;--apagado:#9DB6A4;--dourado:#FDB813;--ok:#6FCF97;--erro:#FF8A80}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--fundo);color:var(--texto);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-text-size-adjust:100%}
+body{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+.topo{display:flex;flex-direction:column;align-items:center;gap:6px;padding:28px 20px 22px}
+.marca{font-family:Georgia,serif;font-weight:800;font-size:20px;letter-spacing:.5px}
+.seguro{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--suave)}
+main{background:var(--folha);border-radius:28px 28px 0 0;min-height:calc(100vh - 110px);padding:26px 20px 40px}
+.caixa{max-width:460px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1{font-family:Georgia,serif;font-size:24px;margin:0;line-height:1.25}
+h2{font-size:15px;margin:0 0 8px;color:var(--suave)}
+p{margin:0;line-height:1.5}
+.suave{color:var(--apagado);font-size:14px}
+.cartao{background:var(--campo);border:1.5px solid var(--borda);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.linha{display:flex;justify-content:space-between;gap:12px;font-size:15px}
+.linha span:first-child{color:var(--apagado)}
+.linha span:last-child{font-weight:700;text-align:right}
+.plano{border-color:var(--dourado)}
+.preco{font-family:Georgia,serif;font-size:34px;font-weight:800}
+.preco small{font-family:system-ui,sans-serif;font-size:15px;font-weight:600;color:var(--suave)}
+ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;color:var(--suave);font-size:14px;line-height:1.45}
+label{font-weight:700;font-size:14px;color:var(--suave)}
+input,textarea{width:100%;font:inherit;font-size:18px;color:var(--texto);background:var(--campo);border:1.5px solid var(--borda);border-radius:14px;padding:15px 16px;outline:none}
+input:focus,textarea:focus{border-color:var(--dourado)}
+input.ok{border-color:var(--ok)} input.erro{border-color:var(--erro)}
+.aviso{font-size:13px;font-weight:600}
+.aviso.ok{color:var(--ok)} .aviso.erro{color:var(--erro)}
+.escolha{display:flex;gap:10px}
+.escolha button{flex:1;min-height:56px;border-radius:14px;border:2px solid var(--borda);background:var(--campo);color:var(--texto);font:inherit;font-weight:800;font-size:16px;cursor:pointer}
+.escolha button[aria-checked=true]{border-color:var(--dourado);background:#24452F}
+.botao{width:100%;min-height:58px;border:0;border-radius:14px;background:var(--dourado);color:#14361F;font:inherit;font-weight:800;font-size:17px;cursor:pointer}
+.botao:disabled{background:#3A4A3F;color:#7F9384;cursor:not-allowed}
+.link{background:none;border:0;color:var(--dourado);font:inherit;font-weight:700;font-size:15px;cursor:pointer;padding:10px;min-height:44px}
+.qr{display:flex;justify-content:center;background:#fff;border-radius:16px;padding:14px}
+.qr img{width:220px;height:220px;image-rendering:pixelated}
+textarea{font-size:13px;min-height:96px;resize:none;word-break:break-all}
+ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px;line-height:1.45;color:var(--suave)}
+.esperando{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--suave)}
+.giro{width:18px;height:18px;border-radius:50%;border:3px solid var(--borda);border-top-color:var(--dourado);animation:g 1s linear infinite;flex-shrink:0}
+@keyframes g{to{transform:rotate(360deg)}}
+.centro{text-align:center;align-items:center}
+.selo{width:76px;height:76px;border-radius:50%;background:#12301D;border:2px solid var(--ok);display:flex;align-items:center;justify-content:center}
+.teste{border:2px dashed var(--dourado);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header class="topo">
+  <img src="/site/simbolo.png" alt="" width="74" height="45" style="display:block">
+  <div class="marca">AGROVINC</div>
+  <div class="seguro"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6FCF97" stroke-width="2.4" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Página segura</div>
+</header>
+<main>
+  <div class="caixa">
+    <section id="carregando" class="esperando"><span class="giro"></span>Carregando seus dados…</section>
+
+    <section id="erro" class="caixa" hidden>
+      <h1>Link indisponível</h1>
+      <p id="erroTexto" class="suave"></p>
+    </section>
+
+    <section id="formulario" class="caixa" hidden>
+      <div>
+        <h1 id="ola"></h1>
+        <p class="suave" style="margin-top:6px">Estes dados vieram do seu cadastro no app. Não precisa digitar de novo.</p>
+      </div>
+      <div class="cartao">
+        <div class="linha"><span>WhatsApp</span><span id="dWhats"></span></div>
+        <div class="linha"><span>Perfil</span><span id="dPerfil"></span></div>
+        <div class="linha"><span>Cidade</span><span id="dCidade"></span></div>
+      </div>
+      <div class="cartao plano">
+        <h2>PLANO AGROVINC</h2>
+        <div class="preco">R$ <span id="valor"></span> <small>por mês</small></div>
+        <ul>
+          <li>Contratar máquinas, implementos, fretes e serviços</li>
+          <li>Anunciar seus equipamentos e serviços</li>
+          <li>Receber pedidos de orçamento da sua região</li>
+        </ul>
+        <p class="suave" style="font-size:13px">Renova todo mês no mesmo dia. Avisamos antes do vencimento. Cancele quando quiser.</p>
+      </div>
+
+      <div id="bloqueioLoja" class="cartao" hidden><p>Você já assina pelo Google Play ou pela App Store. Para pagar por aqui, cancele primeiro a assinatura na loja.</p></div>
+      <div id="desligado" class="cartao" hidden><p>O pagamento pelo site está em manutenção. Tente de novo mais tarde ou assine pelo app.</p></div>
+
+      <div id="campos" class="caixa">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label for="documento">CPF ou CNPJ de quem paga</label>
+          <input id="documento" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="000.000.000-00" maxlength="18" aria-describedby="docAviso">
+          <span id="docAviso" class="aviso" role="status"></span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label id="rotMetodo">Como você quer pagar?</label>
+          <div class="escolha" role="radiogroup" aria-labelledby="rotMetodo">
+            <button type="button" role="radio" aria-checked="true" data-metodo="pix">Pix</button>
+            <button type="button" role="radio" aria-checked="false" data-metodo="cartao">Cartão de crédito</button>
+          </div>
+          <p id="explica" class="suave"></p>
+        </div>
+        <p id="falhaEnvio" class="aviso erro" role="alert" hidden></p>
+        <button id="continuar" class="botao" type="button" disabled>Gerar Pix</button>
+      </div>
+    </section>
+
+    <section id="pix" class="caixa" hidden>
+      <h1>Pague R$ <span class="vValor"></span> com Pix</h1>
+      <ol>
+        <li>Toque em <b>Copiar código Pix</b>.</li>
+        <li>Abra o app do seu banco e entre em <b>Pix</b>.</li>
+        <li>Escolha <b>Pix Copia e Cola</b>, cole o código e confirme.</li>
+      </ol>
+      <label for="copiaCola">Pix copia e cola</label>
+      <textarea id="copiaCola" readonly></textarea>
+      <button id="copiar" class="botao" type="button">Copiar código Pix</button>
+      <p id="copiado" class="aviso ok" role="status"></p>
+      <div id="qrCaixa" hidden>
+        <p class="suave" style="margin-bottom:8px">Se estiver em outro celular, leia o QR Code:</p>
+        <div class="qr"><img id="qr" alt="QR Code do Pix"></div>
+      </div>
+      <div class="esperando" role="status"><span class="giro"></span><span id="esperandoTexto">Aguardando o pagamento. Esta página atualiza sozinha quando o Pix cair.</span></div>
+      <div id="simularPix" class="teste" hidden><p class="suave">Modo de teste: nenhuma cobrança é real.</p><button class="link" type="button" data-simular>Simular pagamento aprovado</button></div>
+      <button class="link" type="button" data-voltar>Trocar forma de pagamento</button>
+    </section>
+
+    <section id="cartaoTeste" class="caixa" hidden>
+      <h1>Cartão de crédito</h1>
+      <div class="teste"><p class="suave">Modo de teste: aqui abriria a página segura da empresa de pagamento para digitar o cartão.</p><button class="link" type="button" data-simular>Simular cartão aprovado</button></div>
+      <div class="esperando" role="status"><span class="giro"></span>Aguardando a aprovação…</div>
+      <button class="link" type="button" data-voltar>Trocar forma de pagamento</button>
+    </section>
+
+    <section id="sucesso" class="caixa centro" hidden>
+      <div class="selo"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#6FCF97" stroke-width="3" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <h1>Pagamento confirmado!</h1>
+      <p class="suave">Sua conta já está liberada no app. O recibo também foi enviado no seu WhatsApp.</p>
+      <a class="botao" href="agrovinc://" style="display:flex;align-items:center;justify-content:center;text-decoration:none">Voltar para o app AGROVINC</a>
+    </section>
+  </div>
+</main>
+<script src="/site/ativar.js"></script>
+</body>
+</html>

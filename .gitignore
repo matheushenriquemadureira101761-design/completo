@@ -1,0 +1,46 @@
+# Dependências
+node_modules/
+.pnp
+.pnp.js
+
+# Builds
+dist/
+build/
+.expo/
+.expo-shared/
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Variáveis de ambiente (NUNCA subir)
+.env
+.env.local
+.env.*.local
+backend/.env
+app/.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Testes
+coverage/
+.nyc_output
+
+# Netlify
+.netlify/
+
+# Temporários
+tmp/
+temp/
+*.tmp

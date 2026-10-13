@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "AGROVINC",
+    "slug": "agrovinc",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icone.png",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "br.com.agrovinc.app"
+    },
+    "android": {
+      "package": "br.com.agrovinc.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icone-android.png",
+        "backgroundColor": "#0C2A17"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-font",
+      [
+        "expo-notifications",
+        {
+          "color": "#2E9A46"
+        }
+      ],
+      "expo-iap",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/abertura-icone.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
+          "backgroundColor": "#0B1406"
+        }
+      ]
+    ],
+    "scheme": "agrovinc",
+    "backgroundColor": "#14361F",
+    "experiments": {
+      "typedRoutes": false
+    }
+  }
+}
