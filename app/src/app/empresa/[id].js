@@ -42,7 +42,12 @@ export default function PaginaEmpresa() {
     return () => { ativo = false; };
   }, [id]);
 
-  async function falar() { if (await exigirConta('falar com a empresa')) { /* abrir chat / WhatsApp */ } }
+  async function falar() {
+    if (!(await exigirConta('falar com a empresa'))) return;
+    // Se a empresa for Premium, abre WhatsApp direto. Senão, chat interno.
+    if (e?.premium && e?.whatsapp) { /* TODO: abrir Linking WhatsApp */ return; }
+    router.push({ pathname: '/chat/[id]', params: { id: String(id), nome: e?.nome || 'Conversa' } });
+  }
   async function pedirOrcamento() { if (await exigirConta('pedir orçamento')) router.push({ pathname: '/orcamento/[id]', params: { id: String(id) } }); }
 
   if (erro) return (

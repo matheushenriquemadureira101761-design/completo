@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { View, Text, ScrollView, RefreshControl, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Pressable, RefreshControl, StyleSheet } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -15,16 +15,24 @@ import { cor, fonte } from '../../tema';
 const saudacao = () => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite'; };
 const primeiroNome = (nome) => { if (!nome) return ''; return String(nome).trim().split(/\s+/)[0]; };
 
-function AvisoAssinatura({ s }) {
+function AvisoAssinatura({ s, aoTocar }) {
   if (!s) return null;
   let texto = null; let forte = false;
-  if (s.estado === 'teste') texto = s.diasRestantes === 1 ? 'Hoje é o último dia do seu teste grátis.' : `Teste grátis: faltam ${s.diasRestantes} dias${s.ate ? ` (até ${dataCurta(s.ate)})` : ''}.`;
-  if (s.estado === 'vence_hoje') { texto = 'Sua assinatura vence hoje.'; forte = true; }
-  if (s.estado === 'atrasada') { texto = `Sua assinatura venceu. O acesso será pausado em ${dataCurta(s.pausaEm)}.`; forte = true; }
+  if (s.estado === 'teste') texto = s.diasRestantes === 1 ? `Último dia do teste grátis` : `Teste grátis · ${s.diasRestantes} dias`;
+  if (s.estado === 'vence_hoje') { texto = 'Sua assinatura vence hoje'; forte = true; }
+  if (s.estado === 'atrasada') { texto = `Venceu · pausa em ${dataCurta(s.pausaEm)}`; forte = true; }
   if (!texto) return null;
   return (
-    <View style={{ marginHorizontal: 16, marginBottom: 10, padding: 12, borderRadius: 12, borderWidth: 1, borderColor: forte ? cor.dourado : cor.borda, backgroundColor: cor.campo }}>
-      <Text style={{ fontFamily: fonte.media, fontSize: 13, color: forte ? cor.dourado : cor.textoSuave }}>{texto}</Text>
+    <View style={{ paddingHorizontal: 20, marginTop: -4, marginBottom: 10, alignItems: 'flex-start' }}>
+      <Pressable onPress={aoTocar} style={({ pressed }) => [{
+        flexDirection: 'row', alignItems: 'center', gap: 8,
+        backgroundColor: forte ? 'rgba(253,184,19,0.12)' : 'rgba(255,255,255,0.06)',
+        borderWidth: 1, borderColor: forte ? 'rgba(253,184,19,0.4)' : cor.borda,
+        paddingVertical: 6, paddingHorizontal: 12, borderRadius: 999,
+      }, pressed && { opacity: 0.85 }]}>
+        <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: forte ? cor.dourado : cor.ok }} />
+        <Text style={{ fontFamily: fonte.media, fontSize: 11, color: forte ? cor.dourado : cor.textoSuave, letterSpacing: 0.3 }}>{texto}</Text>
+      </Pressable>
     </View>
   );
 }
@@ -85,7 +93,7 @@ export default function Inicio() {
           <Text style={estilos.saudacao}>{saudacao()}{nome ? `, ${nome}` : ''}</Text>
           <Text style={estilos.sublinha}>O que você precisa resolver hoje?</Text>
         </View>
-        <AvisoAssinatura s={situacao} />
+        <AvisoAssinatura s={situacao} aoTocar={() => router.push('/planos')} />
         <GridAcoes aoTocar={abrirAcao} />
         <BannerRotativo empresas={empresas} aoTocar={abrirEmpresa} />
         {erro ? <View style={{ padding: 16 }}><Text style={{ color: cor.erro, fontFamily: fonte.normal, fontSize: 13 }}>{erro}</Text></View> : null}

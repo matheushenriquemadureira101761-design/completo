@@ -10,7 +10,9 @@ import { telaDaSituacao } from '../servicos/rota';
 import { Botao } from '../componentes/ui';
 import { fonte } from '../tema';
 
-const TEMPO_MINIMO = 1800;            // a abertura aparece pelo menos esse tempo (ms)
+import { Platform } from 'react-native';
+// Tempo mínimo da abertura. No web usamos um pouco mais pra sempre ver a identidade antes de carregar.
+const TEMPO_MINIMO = Platform.OS === 'web' ? 2600 : 1800;
 const PROPORCAO_LOGO = 658 / 906;     // altura / largura da imagem logo-abertura.png
 
 /**

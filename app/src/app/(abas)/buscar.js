@@ -1,17 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 import { View, Text, TextInput, FlatList, ScrollView, ActivityIndicator, StyleSheet } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icone } from '../../componentes/icones';
 import { CartaoAnuncio, ChipCategoria, CATEGORIAS } from '../../componentes/marketplace';
 import { Mensagem } from '../../componentes/ui';
+import BuscaRota from '../../componentes/BuscaRota';
 import { api } from '../../servicos/api';
 import { tratarErroDeAcesso } from '../../servicos/erros';
 import { cor, fonte } from '../../tema';
 
 export default function Buscar() {
   const insets = useSafeAreaInsets();
+  const params = useLocalSearchParams();
   const [texto, setTexto] = useState('');
-  const [categoria, setCategoria] = useState('');
+  const [categoria, setCategoria] = useState(() => {
+    const c = String(params?.categoria || '').toLowerCase();
+    if (c === 'frete')   return 'frete';
+    if (c === 'máquina' || c === 'maquina') return 'maquina';
+    if (c === 'serviço' || c === 'servico') return 'servico';
+    return '';
+  });
+  const [rota, setRota] = useState(null);
   const [res, setRes] = useState(null);
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState(null);
@@ -19,18 +29,25 @@ export default function Buscar() {
 
   useEffect(() => {
     const termo = texto.trim();
-    if (termo.length < 2 && !categoria) { setRes(null); return undefined; }
+    const temRota = categoria === 'frete' && rota;
+    if (termo.length < 2 && !categoria && !temRota) { setRes(null); return undefined; }
     const n = ++pedido.current;
     const t = setTimeout(async () => {
       setCarregando(true); setErro(null);
       try {
-        const q = new URLSearchParams({ raio: '600', ...(termo.length >= 2 ? { q: termo } : {}), ...(categoria ? { categoria } : {}) });
+        const parametros = { raio: '600', ...(termo.length >= 2 ? { q: termo } : {}), ...(categoria ? { categoria } : {}) };
+        if (temRota) {
+          parametros.origemCidade = rota.origem.nome; parametros.origemUf = rota.origem.uf;
+          parametros.destinoCidade = rota.destino.nome; parametros.destinoUf = rota.destino.uf;
+          parametros.desvioKm = String(rota.raioKm);
+        }
+        const q = new URLSearchParams(parametros);
         const r = await api(`/anuncios?${q}`);
-        if (n === pedido.current) setRes(r); // ignora respostas antigas se a pessoa continuou digitando
+        if (n === pedido.current) setRes(r);
       } catch (e) { if (!(await tratarErroDeAcesso(e))) setErro(e.message); } finally { if (n === pedido.current) setCarregando(false); }
     }, 400);
     return () => clearTimeout(t);
-  }, [texto, categoria]);
+  }, [texto, categoria, rota]);
 
   return (
     <View style={{ flex: 1, backgroundColor: cor.folha, paddingTop: insets.top + 14 }}>
@@ -42,8 +59,9 @@ export default function Buscar() {
             style={{ flex: 1, fontFamily: fonte.normal, fontSize: 16, color: '#16241B', minHeight: 48 }} returnKeyType="search" accessibilityLabel="O que você procura" />
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
-          {CATEGORIAS.map((c) => <ChipCategoria key={c.valor} c={c} ativo={c.valor === categoria} aoTocar={() => setCategoria(c.valor)} />)}
+          {CATEGORIAS.map((c) => <ChipCategoria key={c.valor} c={c} ativo={c.valor === categoria} aoTocar={() => { setCategoria(c.valor); setRota(null); }} />)}
         </ScrollView>
+        {categoria === 'frete' && <BuscaRota aoBuscar={setRota} />}
         {erro && <Mensagem>{erro}</Mensagem>}
         {res && <Text style={{ fontFamily: fonte.normal, fontSize: 13, color: cor.textoApagado }}>{res.total === 1 ? '1 anúncio encontrado' : `${res.total} anúncios encontrados`} até {res.raioKm} km</Text>}
       </View>
